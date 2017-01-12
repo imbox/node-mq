@@ -1,0 +1,29 @@
+{
+  "name": "mq",
+  "version": "0.0.1",
+  "description": "ImBox RabbitMq client",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imbox/agents-online.git"
+  },
+  "author": "Mathias Lundell",
+  "private": true,
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/imbox/agents-online/issues"
+  },
+  "homepage": "https://github.com/imbox/agents-online#readme",
+  "devDependencies": {
+    "standard": "^8.3.0"
+  },
+  "dependencies": {
+    "buffered-queue": "^0.1.4",
+    "rabbit-routingkey-parser": "^1.1.2",
+    "rabbot": "ErisExchange/rabbot#project-rm10127_fix_memory_leak",
+    "ramda": "^0.23.0"
+  }
+}
