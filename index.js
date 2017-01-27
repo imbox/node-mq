@@ -95,6 +95,10 @@ Mq.prototype.handle = function (opts) {
     message.timeoutHandler = setTimeout(() => {
       logger.warn(`TimeoutError: ${util.inspect(message)}`)
       message.reject()
+      message.ack = () => {}
+      message.nack = () => {}
+      message.reply = () => {}
+      message.reject = () => {}
     }, unhandledTimeout)
 
     let ack = message.ack
@@ -168,6 +172,10 @@ Mq.prototype.shutdown = function () {
 
 Mq.prototype.publish = function (exchangeName, opts) {
   return this.rabbot.publish(exchangeName, opts, this.connectionName)
+}
+
+Mq.prototype.request = function (exchangeName, opts) {
+  return this.rabbot.request(exchangeName, opts, this.connectionName)
 }
 
 let getNanoSeconds = () => {
