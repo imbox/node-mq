@@ -108,7 +108,7 @@ Mq.prototype.handle = function (opts) {
           routingKey: message.fields.routingKey,
           queue: queue,
           startTime: startDateTimeMs,
-          json: message.body,
+          json: JSON.stringify(message.body),
           duration: now() - startTime
         })
       }
