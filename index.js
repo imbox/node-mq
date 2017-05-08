@@ -27,8 +27,11 @@ function Mq (opts) {
   const rabbot = this.rabbot
   const connectionName = this.connectionName
 
-  // Set always used connection values
-  this.topology.connection.noCacheKeys = true
+  // Fix memory leak
+  if (this.topology.queues) {
+    this.topology.queues.forEach(q => (q.noCacheKeys = true))
+  }
+
   this.topology.connection.clientProperties = R.merge(
     {service: serviceName},
     opts.topology.connection.clientProperties
