@@ -1,10 +1,9 @@
 'use strict'
-let BufferedQueue = require('buffered-queue')
-let R = require('ramda')
-let RoutingKeyParser = require('rabbit-routingkey-parser')
-let util = require('util')
-
-let parser = new RoutingKeyParser()
+const BufferedQueue = require('buffered-queue')
+const R = require('ramda')
+const RoutingKeyParser = require('rabbit-routingkey-parser')
+const util = require('util')
+const parser = new RoutingKeyParser()
 
 module.exports = Mq
 
@@ -19,14 +18,14 @@ function Mq (opts) {
   this.unhandledTimeout = opts.unhandledTimeout || 120 * 1000
   this.statisticsEnabled = opts.statisticsEnabled || false
 
-  let logger = (this.logger = opts.logger || {
+  const logger = (this.logger = opts.logger || {
     debug: console.log,
     warn: console.error
   })
 
-  let serviceName = opts.serviceName || 'default'
-  let rabbot = this.rabbot
-  let connectionName = this.connectionName
+  const serviceName = opts.serviceName || 'default'
+  const rabbot = this.rabbot
+  const connectionName = this.connectionName
 
   // Set always used connection values
   this.topology.connection.noCacheKeys = true
@@ -53,7 +52,7 @@ function Mq (opts) {
   })
 
   if (this.statisticsEnabled) {
-    let publish = this.publish.bind(this)
+    const publish = this.publish.bind(this)
     this.statsQueue = new BufferedQueue('stats-queue', {
       size: 1000,
       flushTimeout: 5000,
@@ -78,20 +77,20 @@ Mq.prototype.configure = function () {
 }
 
 Mq.prototype.handle = function (opts) {
-  let rabbot = this.rabbot
-  let logger = this.logger
-  let connectionName = this.connectionName
-  let unhandledTimeout = this.unhandledTimeout
-  let queue = opts.queue
-  let types = opts.types || ['#']
-  let handler = opts.handler
-  let onUncaughtException = opts.onUncaughtException
-  let statisticsEnabled = this.statisticsEnabled
-  let statsQueue = this.statsQueue
+  const rabbot = this.rabbot
+  const logger = this.logger
+  const connectionName = this.connectionName
+  const unhandledTimeout = this.unhandledTimeout
+  const queue = opts.queue
+  const types = opts.types || ['#']
+  const handler = opts.handler
+  const onUncaughtException = opts.onUncaughtException
+  const statisticsEnabled = this.statisticsEnabled
+  const statsQueue = this.statsQueue
 
-  let onMessage = R.curry((type, message) => {
-    let startDateTimeMs = new Date().getTime()
-    let startTime = now()
+  const onMessage = R.curry((type, message) => {
+    const startDateTimeMs = new Date().getTime()
+    const startTime = now()
 
     // Warn if message hasn't been handled after `unhandledTimeout`
     message.timeoutHandler = setTimeout(() => {
@@ -103,7 +102,7 @@ Mq.prototype.handle = function (opts) {
       message.reject = () => {}
     }, unhandledTimeout)
 
-    let ack = message.ack
+    const ack = message.ack
     message.ack = () => {
       if (statisticsEnabled) {
         statsQueue.add({
@@ -118,13 +117,13 @@ Mq.prototype.handle = function (opts) {
       return ack(arguments)
     }
 
-    let nack = message.nack
+    const nack = message.nack
     message.nack = () => {
       clearTimeout(message.timeoutHandler)
       return nack(arguments)
     }
 
-    let reject = message.reject
+    const reject = message.reject
     message.reject = () => {
       clearTimeout(message.timeoutHandler)
       return reject(arguments)
@@ -163,7 +162,7 @@ Mq.prototype.close = function () {
 }
 
 Mq.prototype.unsubscribe = function () {
-  let self = this
+  const self = this
   return this.topology.queues.map(q => {
     return self.rabbot.stopSubscription(q.name, self.connectionName)
   })
@@ -181,9 +180,9 @@ Mq.prototype.request = function (exchangeName, opts) {
   return this.rabbot.request(exchangeName, opts, this.connectionName)
 }
 
-let getNanoSeconds = () => {
-  let hr = process.hrtime()
+const getNanoSeconds = () => {
+  const hr = process.hrtime()
   return hr[0] * 1e9 + hr[1]
 }
-let loadTime = getNanoSeconds()
-let now = () => (getNanoSeconds() - loadTime) / 1e6
+const loadTime = getNanoSeconds()
+const now = () => (getNanoSeconds() - loadTime) / 1e6
