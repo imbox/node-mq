@@ -29,6 +29,10 @@ function Mq (opts) {
 
   // Set always used connection values
   this.topology.connection.noCacheKeys = true
+  this.topology.connection.clientProperties = R.merge(
+    {service: serviceName},
+    opts.topology.connection.clientProperties
+  )
   rabbot.setAckInterval(20)
 
   rabbot.on(`${connectionName}.connection.opened`, () => {
