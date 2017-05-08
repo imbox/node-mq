@@ -13,7 +13,7 @@ function Mq (opts) {
     return new Mq(opts)
   }
 
-  this.rabbot = opts.rabbot
+  this.rabbot = opts.rabbot || require('rabbot')
   this.topology = R.clone(opts.topology)
   this.connectionName = this.topology.connection.name || 'default'
   this.unhandledTimeout = opts.unhandledTimeout || 120 * 1000
@@ -28,6 +28,8 @@ function Mq (opts) {
   let rabbot = this.rabbot
   let connectionName = this.connectionName
 
+  // Set always used connection values
+  this.topology.connection.noCacheKeys = true
   rabbot.setAckInterval(20)
 
   rabbot.on(`${connectionName}.connection.opened`, () => {

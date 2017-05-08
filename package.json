@@ -23,7 +23,7 @@
   "dependencies": {
     "buffered-queue": "^0.1.4",
     "rabbit-routingkey-parser": "^1.1.2",
-    "rabbot": "ErisExchange/rabbot#project-rm10127_fix_memory_leak",
+    "rabbot": "luddd3/rabbot#9d568c1",
     "ramda": "^0.23.0"
   }
 }
