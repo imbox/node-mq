@@ -19,10 +19,10 @@ function Mq (opts) {
   this.unhandledTimeout = opts.unhandledTimeout || 120 * 1000
   this.statisticsEnabled = opts.statisticsEnabled || false
 
-  let logger = this.logger = opts.logger || {
+  let logger = (this.logger = opts.logger || {
     debug: console.log,
     warn: console.error
-  }
+  })
 
   let serviceName = opts.serviceName || 'default'
   let rabbot = this.rabbot
@@ -162,7 +162,7 @@ Mq.prototype.close = function () {
 
 Mq.prototype.unsubscribe = function () {
   let self = this
-  return this.topology.queues.map((q) => {
+  return this.topology.queues.map(q => {
     return self.rabbot.stopSubscription(q.name, self.connectionName)
   })
 }
@@ -184,4 +184,4 @@ let getNanoSeconds = () => {
   return hr[0] * 1e9 + hr[1]
 }
 let loadTime = getNanoSeconds()
-let now = () => ((getNanoSeconds() - loadTime) / 1e6)
+let now = () => (getNanoSeconds() - loadTime) / 1e6
