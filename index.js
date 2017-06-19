@@ -54,9 +54,13 @@ function Mq (opts) {
     logger.debug('Rabbitmq connection configured')
   })
 
-  rabbot.on(`${connectionName}.connection.unreachable`, () => {
-    throw new Error('Rabbitmq connection unreachable')
-  })
+  rabbot.on(
+    `${connectionName}.connection.unreachable`,
+    opts.onConnectionUnreachable ||
+      function () {
+        throw new Error('Rabbitmq connection unreachable')
+      }
+  )
 
   if (this.statisticsEnabled) {
     const publish = this.publish.bind(this)
