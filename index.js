@@ -17,13 +17,14 @@ function Mq (opts) {
   this.connectionName = this.topology.connection.name || 'default'
   this.unhandledTimeout = opts.unhandledTimeout || 120 * 1000
   this.statisticsEnabled = opts.statisticsEnabled || false
+  this.serviceName = opts.serviceName || 'default'
 
   const logger = (this.logger = opts.logger || {
     debug: console.log,
     warn: console.error
   })
 
-  const serviceName = opts.serviceName || 'default'
+  const serviceName = this.serviceName
   const rabbot = this.rabbot
   const connectionName = this.connectionName
 
@@ -90,6 +91,7 @@ Mq.prototype.configure = function () {
 Mq.prototype.handle = function (opts) {
   const rabbot = this.rabbot
   const logger = this.logger
+  const serviceName = this.serviceName
   const connectionName = this.connectionName
   const unhandledTimeout = this.unhandledTimeout
   const queue = opts.queue
@@ -102,6 +104,14 @@ Mq.prototype.handle = function (opts) {
   const onMessage = R.curry((type, message) => {
     const startDateTimeMs = new Date().getTime()
     const startTime = now()
+
+    if (
+      serviceName !== 'default' &&
+      message.body._meta &&
+      message.body._meta.services
+    ) {
+      message.body._meta.services.push([serviceName, startTime])
+    }
 
     // Warn if message hasn't been handled after `unhandledTimeout`
     message.timeoutHandler = setTimeout(() => {
