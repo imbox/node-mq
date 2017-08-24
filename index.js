@@ -110,7 +110,7 @@ Mq.prototype.handle = function (opts) {
       message.body._meta &&
       message.body._meta.services
     ) {
-      message.body._meta.services.push([serviceName, startTime])
+      message.body._meta.services.push([serviceName, startDateTimeMs])
     }
 
     // Warn if message hasn't been handled after `unhandledTimeout`
