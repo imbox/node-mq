@@ -10,9 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/imbox/agents-online.git"
   },
-  "author": "Mathias Lundell",
+  "author": "ImBox Sweden AB",
   "private": true,
-  "license": "",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/imbox/agents-online/issues"
   },
